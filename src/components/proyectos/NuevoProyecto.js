@@ -5,7 +5,7 @@ const NuevoProyecto = () => {
 
     //Obtener el state del formulario
     const proyectosContext = useContext(proyectoContext);
-    const {formulario,mostrarFormulario} = proyectosContext;
+    const {formulario,errorformulario,mostrarFormulario,agregarProyecto,mostrarError} = proyectosContext;
 
     //State para Proyecto
     const[proyecto, guardarProyecto] = useState({
@@ -28,9 +28,18 @@ const NuevoProyecto = () => {
         e.preventDefault();
         //Validar el proyecto
 
+        if(nombre === ''){
+            mostrarError()
+            return;
+        }
+
         //Agregar Al State
+        agregarProyecto(proyecto)
 
         //Reiniciar El form
+        guardarProyecto ({
+           nombre:''
+       })
     }
     //Mostrar Formulario
     const onClinkFormulario = () =>{
@@ -67,10 +76,9 @@ const NuevoProyecto = () => {
                     />
 
                     </form>
-                ):null
-            }
+                ):null }
 
-            
+            {errorformulario ?<p className="mensaje error">El Nombre Del Proyecto es Obligatorio</p> :null}
         </Fragment>
         
      );
