@@ -1,12 +1,16 @@
 import React,{useReducer} from 'react'
 import TareaContext from './tareaContext'
 import TareaReducer from './tareaReducer'
+import uuid from 'uuid/dist/esm-browser/v4';
 
 import {TAREAS_PROYECTOS,
     AGREGAR_TAREA,
     VALIDAR_TAREA,
     ELIMINAR_TAREA,
-    ESTADO_TAREA
+    ESTADO_TAREA,
+    TAREA_ACTUAL,
+    ACTUALIZAR_TAREA,
+    LIMPIAR_TAREA
 } from '../../types/index'
 
 const TareaState = props =>{
@@ -27,7 +31,8 @@ const TareaState = props =>{
             {id:13,nombre:'Elegir Plataforma de pago', estado:true,proyectoId:3},
         ],
         tareasproyecto:null,
-        errortarea:false
+        errortarea:false,
+        tareaseleccionada:null
     }
 
 
@@ -47,6 +52,7 @@ const TareaState = props =>{
 
     //Agregar una tarea al proyecto seleccionado
     const agregarTarea = tarea =>{
+        tarea.id = uuid();
         dispatch({
             type:AGREGAR_TAREA,
             payload:tarea
@@ -74,6 +80,27 @@ const TareaState = props =>{
             payload:tarea
         })
     }
+    //extraer una tarea para edicion
+    const guardarTareaActual = tarea =>{
+        dispatch ({
+            type:TAREA_ACTUAL,
+            payload:tarea
+        })
+    }
+    //Edita o modifica una tarea 
+    const actualizarTarea = tarea => {
+        dispatch({
+            type:ACTUALIZAR_TAREA,
+            payload:tarea
+        })
+    }
+    //Elimina la tareaseleccionada
+    const limpiarTarea = () =>{
+        dispatch ({
+            type :LIMPIAR_TAREA,
+        
+        })
+    }
 
     return(
         <TareaContext.Provider
@@ -81,11 +108,15 @@ const TareaState = props =>{
                 tareas:state.tareas,
                 tareasproyecto:state.tareasproyecto,
                 errortarea:state.errortarea,
+                tareaseleccionada:state.tareaseleccionada,
                 obtenerTareas,
                 agregarTarea,
                 validarTarea,
                 eliminarTarea,
-                cambiarEstadoTarea
+                cambiarEstadoTarea,
+                guardarTareaActual,
+                actualizarTarea,
+                limpiarTarea
             }}
         >
             
